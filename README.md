@@ -1,6 +1,6 @@
 # DoodleBot 🤖🎨
 
-> Browser-based AI-powered Pictionary for IEEE Ahmedabad University Student Branch — Club Carnival
+> Browser-based AI-powered Pictionary for TLC — ODS AI Futures
 
 DoodleBot is a zero-install, mobile-first web game where carnival attendees draw a target word on their phone and a real-time computer vision model guesses it live. Scores feed a stall-facing live leaderboard.
 
@@ -11,7 +11,7 @@ DoodleBot is a zero-install, mobile-first web game where carnival attendees draw
 - **Zero-Friction Onboarding**: Scan QR code → Enter Name → Start playing in < 10s.
 - **Single-Route State Machine (`/play`)**: `word-select → countdown → drawing → result → word-select`. Canvas DOM & model stay loaded across rounds.
 - **Real-Time AI Inference**: TensorFlow.js CNN downsamples canvas drawings to 28×28 grayscale tensors with inverted ink polarity, processing predictions every 400ms.
-- **IEEE Brand Aesthetic**: Styled with IEEE Master Blue (`#00629b`), high contrast, and responsive `100dvh` layout.
+- **Neo-Maximalism Aesthetic**: Styled with TLC neo-maximalism palette (`#FFE500` bright yellow base, `#FF2D78` hot pink CTAs, chunky `#1A1A2E` borders & brutal shadows) and responsive `100dvh` layout.
 - **Live Leaderboard (`/leaderboard`)**: Supabase Realtime subscription on `game_results` inserts (debounced refetch) plus a 10-second poll fallback, showing total plays, wins, and fastest times.
 - **Offline Durability**: Failed result submissions queue in `localStorage` and retry on the next successful submit and on `window.online`, so a round played on flaky stall Wi-Fi still reaches the leaderboard once connectivity returns.
 

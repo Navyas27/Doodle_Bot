@@ -47,42 +47,43 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
   }, []);
 
   useEffect(() => {
-    // Supabase Realtime subscription on game_results inserts.
-    //
-    // Under supabase/schema.sql's RLS policies this can never actually deliver an event: anon
-    // has no SELECT policy on game_results, and postgres_changes enforces RLS on the subscribing
-    // role (documented at schema.sql:113-119, deliberately — do not add a SELECT policy just to
-    // make this fire). Left wired up anyway: it's harmless, and it starts working for free if
-    // that policy decision is ever revisited. The 10s poll below is what actually keeps the
-    // board live.
-    const supabase = getSupabaseClient();
-    const channel = supabase
-      .channel("leaderboard-changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "game_results",
-        },
-        () => {
-          if (debounceTimer.current) {
-            clearTimeout(debounceTimer.current);
-          }
-          debounceTimer.current = setTimeout(() => {
-            loadData();
-          }, 500); // Debounce to prevent thrashing
-        }
-      )
-      .subscribe();
-
     // Polling fallback every 10 seconds per requirements
     const interval = setInterval(loadData, 10000);
+
+    let supabase: ReturnType<typeof getSupabaseClient> | null = null;
+    let channel: ReturnType<ReturnType<typeof getSupabaseClient>["channel"]> | null = null;
+
+    try {
+      supabase = getSupabaseClient();
+      channel = supabase
+        .channel("leaderboard-changes")
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "game_results",
+          },
+          () => {
+            if (debounceTimer.current) {
+              clearTimeout(debounceTimer.current);
+            }
+            debounceTimer.current = setTimeout(() => {
+              loadData();
+            }, 500); // Debounce to prevent thrashing
+          }
+        )
+        .subscribe();
+    } catch {
+      // Supabase env vars missing — polling + local leaderboard still work
+    }
 
     return () => {
       clearInterval(interval);
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
-      supabase.removeChannel(channel);
+      if (supabase && channel) {
+        supabase.removeChannel(channel);
+      }
     };
   }, [loadData]);
 
@@ -106,15 +107,15 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
   const STATUS_COPY: Record<ConnectionStatus, { label: string; pillClass: string }> = {
     live: {
       label: "Live",
-      pillClass: "bg-win/10 border-win/20 text-win",
+      pillClass: "bg-win/15 border-ink text-win",
     },
     reconnecting: {
       label: "Reconnecting…",
-      pillClass: "bg-ink-muted/10 border-ink-muted/20 text-ink-muted",
+      pillClass: "bg-white border-ink text-ink-muted",
     },
     offline: {
       label: "Offline",
-      pillClass: "bg-urgent/10 border-urgent/20 text-urgent",
+      pillClass: "bg-urgent/15 border-ink text-urgent",
     },
   };
   const statusCopy = STATUS_COPY[status];
@@ -125,15 +126,19 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
         {/* Title Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
           <div className="space-y-1">
-            <h1 className="text-3xl font-black text-ink tracking-tight flex items-center flex-wrap gap-2">
+            <h1
+              className="text-3xl sm:text-4xl font-bold text-ink tracking-wide flex items-center flex-wrap gap-2"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
               <span>Leaderboard</span>
               <FaTrophy aria-hidden="true" className="text-medal-gold" />
               {/* Connection status pill (Issue #14). "Live" only means the last read reached
                   Supabase, not that the Realtime socket is delivering events — see the
                   subscription comment below for why that channel can never fire under RLS. */}
               <span
-                className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full border motion-safe:transition-colors ${statusCopy.pillClass}`}
+                className={`neo-badge gap-1.5 motion-safe:transition-colors ${statusCopy.pillClass}`}
                 role="status"
+                style={{ fontFamily: "var(--font-sans)" }}
               >
                 <FaCircle
                   aria-hidden="true"
@@ -142,11 +147,11 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
                 {statusCopy.label}
               </span>
             </h1>
-            <p className="text-xs font-semibold text-ink-muted">Live Standings</p>
+            <p className="text-xs font-extrabold text-ink-muted uppercase tracking-wider">Live Standings</p>
           </div>
           <Link
             href="/play"
-            className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-ieee-blue hover:bg-ieee-blue-dark rounded-xl shadow-sm transition-all active:scale-95 border border-ieee-blue/20 shrink-0 whitespace-nowrap self-start sm:self-auto"
+            className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-neo-magenta hover:bg-neo-magenta-dark rounded-xl border-3 border-ink shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg transition-all active:scale-95 shrink-0 whitespace-nowrap self-start sm:self-auto"
           >
             Play Now
           </Link>
@@ -154,18 +159,18 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
 
         {/* Glanceable Headline Stats */}
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-ieee-blue/5 border border-ieee-blue/20 rounded-2xl p-3 text-center space-y-1">
-            <span className="text-xs font-semibold text-ink-muted uppercase block">Total Plays</span>
-            <span className="text-2xl font-black text-ieee-blue">{totalGames}</span>
+          <div className="neo-card bg-neo-violet/10 border-neo-violet/30 rounded-2xl p-3 text-center space-y-1">
+            <span className="text-xs font-extrabold text-ink-muted uppercase block">Total Plays</span>
+            <span className="text-2xl font-black text-neo-violet">{totalGames}</span>
           </div>
 
-          <div className="bg-win/5 border border-win/20 rounded-2xl p-3 text-center space-y-1">
-            <span className="text-xs font-semibold text-ink-muted uppercase block">AI Guesses</span>
+          <div className="neo-card bg-neo-cyan/10 border-neo-cyan/30 rounded-2xl p-3 text-center space-y-1">
+            <span className="text-xs font-extrabold text-ink-muted uppercase block">AI Guesses</span>
             <span className="text-2xl font-black text-win">{totalWins}</span>
           </div>
 
-          <div className="bg-ieee-cyan/10 border border-ieee-cyan/30 rounded-2xl p-3 text-center space-y-1">
-            <span className="text-xs font-semibold text-ink-muted uppercase block">Fastest</span>
+          <div className="neo-card bg-neo-orange/10 border-neo-orange/30 rounded-2xl p-3 text-center space-y-1">
+            <span className="text-xs font-extrabold text-ink-muted uppercase block">Fastest</span>
             <span className="text-2xl font-black text-ink">
               {fastestTime !== null ? `${fastestTime.toFixed(1)}s` : "--"}
             </span>
@@ -174,7 +179,7 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
 
         {/* Rankings Table / List */}
         <div className="flex-1 space-y-3">
-          <h2 className="text-xs font-bold text-ink-muted uppercase tracking-wider px-1">
+          <h2 className="text-xs font-extrabold text-ink uppercase tracking-wider px-1">
             Top Participants
           </h2>
 
@@ -183,19 +188,19 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
             // local fallback, not a confirmed empty board. On a stall display, showing the same
             // "no games played" copy here would read as a healthy board that just hasn't seen a
             // play yet, when it may in fact be disconnected from Supabase entirely.
-            <div className="py-12 text-center space-y-3 bg-urgent/5 rounded-2xl border border-urgent/20">
-              <FaCircle aria-hidden="true" className="text-2xl text-urgent" />
-              <p className="text-sm font-semibold text-ink">Can&apos;t reach the leaderboard</p>
-              <p className="text-xs text-ink-muted">Showing this device&apos;s local results. Retrying every 10s.</p>
+            <div className="py-12 text-center space-y-3 neo-card bg-urgent/10 rounded-2xl border-3 border-ink">
+              <FaCircle aria-hidden="true" className="text-2xl text-urgent mx-auto" />
+              <p className="text-sm font-bold text-ink">Can&apos;t reach the leaderboard</p>
+              <p className="text-xs font-semibold text-ink-muted">Showing this device&apos;s local results. Retrying every 10s.</p>
             </div>
           ) : leaderboard.length === 0 ? (
-            <div className="py-12 text-center space-y-3 bg-surface-muted/50 rounded-2xl border border-surface-muted">
-              <FaPalette aria-hidden="true" className="text-4xl text-ieee-cyan" />
-              <p className="text-sm font-semibold text-ink-muted">No games played yet today!</p>
-              <p className="text-xs text-ink-muted">Be the first to draw and set a high score.</p>
+            <div className="py-12 text-center space-y-3 neo-card bg-white rounded-2xl">
+              <FaPalette aria-hidden="true" className="text-4xl text-neo-cyan mx-auto" />
+              <p className="text-sm font-bold text-ink">No games played yet today!</p>
+              <p className="text-xs font-semibold text-ink-muted">Be the first to draw and set a high score.</p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {leaderboard.map((row) => {
                 const isTop3 = row.rank <= 3;
                 const medalColor =
@@ -210,23 +215,23 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
                 return (
                   <div
                     key={row.participantId}
-                    className={`flex items-center justify-between p-4 rounded-2xl border motion-safe:transition-all ${
+                    className={`neo-card flex items-center justify-between p-4 rounded-2xl motion-safe:transition-all ${
                       isTop3
-                        ? "bg-white border-ieee-blue/30 shadow-sm ring-1 ring-ieee-blue/10"
-                        : "bg-surface-muted/40 border-surface-muted"
+                        ? "bg-white border-neo-magenta/30 ring-2 ring-neo-magenta/10"
+                        : "bg-surface-muted border-ink"
                     }`}
                   >
                     {/* Rank & Name */}
                     <div className="flex items-center gap-3">
                       <div
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm ${
+                        className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm border-2 border-ink ${
                           row.rank === 1
-                            ? "bg-amber-100 text-amber-800 border border-amber-300"
+                            ? "bg-amber-100 text-amber-800"
                             : row.rank === 2
-                            ? "bg-slate-200 text-slate-800 border border-slate-300"
+                            ? "bg-slate-200 text-slate-800"
                             : row.rank === 3
-                            ? "bg-orange-100 text-orange-800 border border-orange-300"
-                            : "bg-surface-muted text-ink-muted"
+                            ? "bg-orange-100 text-orange-800"
+                            : "bg-white text-ink"
                         }`}
                       >
                         {medalColor ? (
@@ -245,7 +250,7 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
 
                       <div>
                         <span className="font-bold text-base text-ink block">{row.name}</span>
-                        <div className="flex items-center gap-2 text-xs text-ink-muted">
+                        <div className="flex items-center gap-2 text-xs font-semibold text-ink-muted">
                           <span>{row.successfulGuesses} wins</span>
                           <span>•</span>
                           <span>{row.gamesPlayed} games</span>
@@ -255,8 +260,8 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
 
                     {/* Score & Best Time */}
                     <div className="text-right">
-                      <span className="font-black text-lg text-ieee-blue block">{row.score} pts</span>
-                      <span className="text-xs font-semibold text-ink-muted">
+                      <span className="font-black text-lg text-neo-magenta block">{row.score} pts</span>
+                      <span className="text-xs font-bold text-ink-muted">
                         {/* Truthiness would treat an exact 0.0s best time as "No wins yet" — compare
                             against null explicitly. The offline path can't produce 0 (clamped to a
                             0.5s minimum in app/play/page.tsx), but remote data isn't clamped. */}

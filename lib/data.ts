@@ -244,7 +244,13 @@ function getStoredParticipantName(participantId: string): string | null {
 
 async function attemptInsert(result: GameResultInput): Promise<InsertOutcome> {
   const payload = toInsertPayload(result);
-  const supabase = getSupabaseClient();
+  let supabase;
+  try {
+    supabase = getSupabaseClient();
+  } catch (err) {
+    console.warn("submitResult: Supabase client unavailable, queuing locally:", err);
+    return "network-error";
+  }
 
   const { error, status } = await supabase
     .from("game_results")

@@ -43,14 +43,14 @@ export default function PlayPage() {
   // Random sized decorative background dots OUTSIDE the canvas
   const bgDots = useMemo(() => {
     const colors = [
-      "#FFD93D",
-      "#FF8C42",
-      "#FF6B9D",
-      "#6BCB77",
-      "#9B59B6",
-      "#4fd9ff",
-      "#00629b",
-      "#FF6F61",
+      "#FFE500",
+      "#FF6B35",
+      "#FF2D78",
+      "#06D6A0",
+      "#8B5CF6",
+      "#3B82F6",
+      "#A3E635",
+      "#FF4757",
     ];
     return Array.from({ length: 28 }).map((_, i) => ({
       id: i,
@@ -243,9 +243,9 @@ export default function PlayPage() {
           <>
             {isModelLoading && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface/80 backdrop-blur-sm">
-                <div className="text-center space-y-3 animate-pulse">
+                <div className="text-center space-y-3 animate-pulse neo-card p-6 bg-white">
                   <span className="text-5xl block animate-float">🤖</span>
-                  <p className="text-sm font-bold text-ieee-blue">Warming up AI brain...</p>
+                  <p className="text-sm font-bold text-neo-magenta">Warming up AI brain...</p>
                 </div>
               </div>
             )}
@@ -274,12 +274,12 @@ export default function PlayPage() {
           {/* Right Rail: Target, Timer, Live AI Guess */}
           <div className="lg:col-span-4 flex flex-col gap-4 pt-3 lg:pt-0 overflow-hidden">
             {/* Desktop Target & Timer Panel */}
-            <div className="hidden lg:flex flex-col space-y-3 p-5 rounded-2xl bg-white/90 backdrop-blur-sm border-2 border-fun-yellow/30 shadow-sm">
+            <div className="hidden lg:flex flex-col space-y-3 p-5 rounded-2xl neo-card bg-white">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-bold text-ink-muted flex items-center gap-1.5">
                   🎯 Draw this!
                 </span>
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-surface-muted text-ink-muted border border-surface-muted uppercase">
+                <span className="neo-badge bg-neo-yellow text-ink uppercase">
                   {selectedWord?.difficulty}
                 </span>
               </div>
@@ -291,13 +291,13 @@ export default function PlayPage() {
                   {selectedWord?.id}
                 </span>
               </div>
-              <div className="flex items-center justify-between pt-2 border-t border-surface-muted">
-                <span className="text-xs font-semibold text-ink-muted">⏱️ Time left</span>
+              <div className="flex items-center justify-between pt-2 border-t-2 border-ink/15">
+                <span className="text-xs font-bold text-ink-muted">⏱️ Time left</span>
                 <div
-                  className={`flex items-center gap-1.5 font-mono text-2xl font-black px-4 py-1.5 rounded-xl border-2 ${
+                  className={`flex items-center gap-1.5 font-mono text-2xl font-black px-4 py-1.5 rounded-xl border-2 border-ink shadow-brutal ${
                     timeLeft <= 5
-                      ? "text-fun-coral border-fun-coral/40 bg-fun-coral/10 animate-pulse"
-                      : "text-ink border-fun-green/40 bg-fun-green/10"
+                      ? "text-white bg-neo-red animate-pulse"
+                      : "text-ink bg-neo-cyan"
                   }`}
                 >
                   <span>{timeLeft}s</span>
@@ -315,12 +315,12 @@ export default function PlayPage() {
             </div>
 
             {/* Desktop AI info banner */}
-            <div className="hidden lg:flex flex-col gap-2 p-4 rounded-2xl bg-white/80 border border-fun-purple/20 text-xs text-ink-muted shadow-xs">
-              <div className="flex items-center gap-1.5 font-bold text-fun-purple">
+            <div className="hidden lg:flex flex-col gap-2 p-4 rounded-2xl neo-card bg-white text-xs text-ink-muted">
+              <div className="flex items-center gap-1.5 font-bold text-neo-violet">
                 <span>🤖 AI is watching</span>
-                <span className="text-[10px] bg-fun-green/20 text-fun-green px-1.5 py-0.5 rounded-full border border-fun-green/30 font-bold">LIVE</span>
+                <span className="neo-badge bg-neo-cyan text-ink text-[10px] px-2 py-0.5">LIVE</span>
               </div>
-              <p>
+              <p className="font-medium">
                 The AI model is analyzing your sketch in real-time! Draw clearly to beat the clock.
               </p>
             </div>

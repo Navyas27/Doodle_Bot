@@ -16,10 +16,10 @@ export function Card({
 }: CardProps) {
   return (
     <div
-      className={`rounded-2xl border bg-white p-5 transition-all shadow-sm ${
-        interactive ? "cursor-pointer hover:border-ieee-blue hover:shadow-md active:scale-[0.99]" : ""
+      className={`neo-card p-5 transition-all ${
+        interactive ? "cursor-pointer neo-card-hover active:scale-[0.98]" : ""
       } ${
-        selected ? "border-ieee-blue bg-ieee-blue/5 ring-2 ring-ieee-blue/20" : "border-surface-muted"
+        selected ? "ring-4 ring-neo-magenta/40 border-neo-magenta bg-neo-magenta/5" : "border-ink"
       } ${className}`}
       {...props}
     >

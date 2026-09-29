@@ -10,58 +10,63 @@
 
 /*
  * Every design token lives in this one @theme block. Tailwind v4 is CSS-first — there is no
- * tailwind.config.js, and declaring --color-ieee-blue is what generates bg-ieee-blue,
- * text-ieee-blue, border-ieee-blue and the rest.
+ * tailwind.config.js, and declaring --color-neo-yellow is what generates bg-neo-yellow,
+ * text-neo-yellow, border-neo-yellow and the rest.
  *
- * The IEEE hexes are UNVERIFIED. #00629b is the widely-used primary; the supporting palette
- * is a working approximation and brand compliance is a committee-review criterion. Correcting
- * them should mean editing this block and nothing else, so never hardcode a brand hex in a
- * component. See docs/03-design-system.md § 2.
+ * Neo-maximalism palette for TLC Club Carnival branding. Bold clashing colours, chunky
+ * borders, heavy shadows, exaggerated typography, playful chaos with intentional structure.
  */
 @theme {
-  /* Brand */
-  --color-ieee-blue: #00629b;
-  --color-ieee-blue-dark: #00416a;
-  --color-ieee-blue-light: #4a91bf;
-  /*
-   * 19a347a renamed this to --color-ieee-cyan-light (and changed its hex) without updating the
-   * five components still using text-ieee-cyan / bg-ieee-cyan / border-ieee-cyan, which then
-   * generated no CSS at all (Issue #39). Restored rather than migrating those call sites, since
-   * the brand-hex question this token depends on is still open (#36) and this is the version
-   * docs/03-design-system.md § 2 already documents.
-   */
-  --color-ieee-cyan: #00b5e2;
-  --color-ieee-cyan-light: #4fd9ff;
+  /* ═══ PRIMARY — Bright Yellow Base ═══ */
+  --color-neo-yellow:       #FFE500;
+  --color-neo-yellow-dark:  #E6CF00;
+  --color-neo-yellow-light: #FFF44F;
 
-  /* Fun palette — playful accent colors for a game feel */
-  --color-fun-yellow: #FFD93D;
-  --color-fun-orange: #FF8C42;
-  --color-fun-pink: #FF6B9D;
-  --color-fun-green: #6BCB77;
-  --color-fun-purple: #9B59B6;
-  --color-fun-coral: #FF6F61;
+  /* ═══ ACCENT SPECTRUM — Maximum Vibrancy ═══ */
+  --color-neo-magenta:      #FF2D78;
+  --color-neo-magenta-dark: #D91A60;
+  --color-neo-violet:       #8B5CF6;
+  --color-neo-blue:         #3B82F6;
+  --color-neo-cyan:         #06D6A0;
+  --color-neo-orange:       #FF6B35;
+  --color-neo-red:          #EF4444;
+  --color-neo-lime:         #A3E635;
 
-  /* Surfaces */
-  --color-surface: #ffffff;
-  --color-surface-muted: #f4f6f8;
-  --color-ink: #0a0a0a;
-  --color-ink-muted: #5b6670;
+  /* ═══ SURFACES ═══ */
+  --color-surface:          #FFE500;
+  --color-surface-card:     #FFFFFF;
+  --color-surface-muted:    #FFF9C4;
 
-  /* Semantic. Never carry outcome on colour alone — always pair with text and iconography. */
-  --color-win: #1a7f5a;
-  --color-timeout: #b4531f;
-  --color-urgent: #c0392b;
+  /* ═══ INK ═══ */
+  --color-ink:              #1A1A2E;
+  --color-ink-muted:        #4A4A5A;
 
-  /* Medal iconography (#37) — the leaderboard's rank badges already use amber/slate/orange
-     backgrounds (LeaderboardClient.tsx); these keep the medal icon in step with that instead of
-     introducing a fourth, uncoordinated colour system. */
-  --color-medal-gold: #b8860b;
-  --color-medal-silver: #6b7280;
-  --color-medal-bronze: #b45309;
+  /* ═══ SEMANTIC ═══ */
+  --color-win:              #06D6A0;
+  --color-timeout:          #FF6B35;
+  --color-urgent:           #EF4444;
 
-  /* Type */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* ═══ MEDALS ═══ */
+  --color-medal-gold:       #b8860b;
+  --color-medal-silver:     #6b7280;
+  --color-medal-bronze:     #b45309;
+
+  /* ═══ FUN PALETTE — boosted saturation ═══ */
+  --color-fun-yellow:       #FFE500;
+  --color-fun-orange:       #FF6B35;
+  --color-fun-pink:         #FF2D78;
+  --color-fun-green:        #06D6A0;
+  --color-fun-purple:       #8B5CF6;
+  --color-fun-coral:        #FF4757;
+
+  /* ═══ TYPE ═══ */
+  --font-sans:    var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Fredoka', var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* ═══ NEO-MAX EXTRAS ═══ */
+  --shadow-brutal:    4px 4px 0px #1A1A2E;
+  --shadow-brutal-lg: 6px 6px 0px #1A1A2E;
+  --border-chunky:    3px solid #1A1A2E;
 
   /* Stall-display scale — leaderboard only. The landscape layout is deferred; the tokens stay
      so it can be picked up without re-deriving the scale. */
@@ -77,7 +82,7 @@ body {
 }
 
 body {
-  background: var(--color-surface);
+  background: var(--color-neo-yellow);
   color: var(--color-ink);
   font-family: var(--font-sans);
 }
@@ -98,11 +103,52 @@ body {
   backdrop-filter: blur(8px);
 }
 
-/* Fun doodle-style dotted background pattern */
-@utility doodle-bg {
-  background-image: radial-gradient(circle, #e0e7ef 1px, transparent 1px);
-  background-size: 24px 24px;
+/* Neo-max brutalist card */
+@utility neo-card {
+  background: white;
+  border: 3px solid #1A1A2E;
+  border-radius: 1rem;
+  box-shadow: 4px 4px 0px #1A1A2E;
+  transition: transform 0.15s, box-shadow 0.15s;
 }
+
+/* Hover lift for cards */
+@utility neo-card-hover {
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #1A1A2E;
+  }
+}
+
+/* Chunky pill badges */
+@utility neo-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border: 2px solid #1A1A2E;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Neo-max dotted pattern background */
+@utility neo-pattern {
+  background-image:
+    radial-gradient(circle, #1A1A2E 1px, transparent 1px),
+    radial-gradient(circle, #FF2D78 0.5px, transparent 0.5px);
+  background-size: 20px 20px, 30px 30px;
+  background-position: 0 0, 10px 10px;
+  opacity: 0.06;
+}
+
+/* Legacy doodle-bg compat */
+@utility doodle-bg {
+  background-image: radial-gradient(circle, #1A1A2E 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 1;
+}
+
+/* ═══ ANIMATIONS ═══ */
 
 @keyframes fadeIn {
   from {
@@ -202,4 +248,26 @@ body {
 
 @utility animate-float {
   animation: float 2s ease-in-out infinite;
+}
+
+/* Rainbow shimmer animation */
+@keyframes rainbow-shift {
+  0%   { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+@utility animate-rainbow {
+  animation: rainbow-shift 6s linear infinite;
+}
+
+/* Bounce-in for neo-max entrances */
+@keyframes bounceIn {
+  0%   { transform: scale(0.3); opacity: 0; }
+  50%  { transform: scale(1.05); }
+  70%  { transform: scale(0.95); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@utility animate-bounce-in {
+  animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
