@@ -15,7 +15,7 @@ const BG_GRADIENTS = [
 ];
 
 export function CountdownOverlay({ word, onComplete }: CountdownOverlayProps) {
-  const [count, setCount] = useState(3);
+  const [count, setCount] = useState(2);
 
   useEffect(() => {
     if (count < 0) {
@@ -79,7 +79,7 @@ export function CountdownOverlay({ word, onComplete }: CountdownOverlayProps) {
               strokeLinecap="round"
               strokeDasharray={circumference}
               style={{
-                animation: "countdownRing 3.5s linear forwards",
+                animation: "countdownRing 2.5s linear forwards",
                 filter: "drop-shadow(0 0 8px rgba(255,229,0,0.7))",
               }}
             />
