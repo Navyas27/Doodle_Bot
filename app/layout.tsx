@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "DoodleBot — IEEE AU Student Branch",
+  title: "DoodleBot — TLC",
   description: "Draw it. Beat the AI. Top the board.",
 };
 

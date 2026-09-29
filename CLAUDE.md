@@ -1,7 +1,6 @@
 # DoodleBot
 
-Browser-based AI Pictionary for the IEEE Ahmedabad University Student Branch stall at Club
-Carnival. Participants scan a QR code, draw a word on their phone, and a computer vision model
+Browser-based AI Pictionary for the TLC stall at ODS AI Futures. Participants scan a QR code, draw a word on their phone, and a computer vision model
 guesses it live. Scores feed a stall-facing leaderboard.
 
 **Build window is 2 days.** Prefer the boring, working solution over the elegant one. Every
@@ -11,14 +10,14 @@ guesses it live. Scores feed a stall-facing leaderboard.
 
 ## Current state
 
-The repo is **documentation only**. The Next.js app is not scaffolded yet. Treat everything below
-as the target conventions, not a description of existing code.
+The repo is **documentation + app**. Treat everything below
+as the target conventions.
 
 ```
 docs/
   01-prd.md              Product requirements, scope, success metrics, open questions
   02-architecture.md     Stack, data model, inference pipeline, routes, ranking
-  03-design-system.md    IEEE branding, Tailwind v4 tokens, screens, mobile canvas gotchas
+  03-design-system.md    TLC branding, Tailwind v4 tokens, screens, mobile canvas gotchas
   04-event-ops.md        Event-day logistics, checklists, escalation
 CLAUDE.md
 DoodleBot.pdf            Source document the docs were derived from
@@ -53,7 +52,7 @@ v4 differs from v3 in ways that matter here. Do not write v3 patterns from muscl
 - **No `tailwind.config.js`.** Configuration is CSS. If you find yourself creating one, stop.
 - Entry is `@import "tailwindcss";` — **not** the three `@tailwind` directives.
 - Design tokens go in a **single `@theme` block** in `app/globals.css`. Declaring
-  `--color-ieee-blue` auto-generates `bg-ieee-blue`, `text-ieee-blue`, `border-ieee-blue`, etc.
+  `--color-neo-yellow` auto-generates `bg-neo-yellow`, `text-neo-yellow`, `border-neo-yellow`, etc.
 - `@theme` generates utilities. Plain `:root` variables do **not**. Use `@theme` for anything that
   needs a utility class.
 - Custom utilities use `@utility`, not `@layer utilities` + `@apply`.
@@ -62,8 +61,7 @@ v4 differs from v3 in ways that matter here. Do not write v3 patterns from muscl
 - `@apply` inside a separate CSS file needs `@reference` to see the theme. Prefer utility classes
   in markup over `@apply` entirely.
 
-**Never hardcode brand hexes in components.** Use `bg-ieee-blue`, not `bg-[#00629b]`. The IEEE
-palette values are unverified (see below) and will likely change in one place.
+**Never hardcode brand hexes in components.** Use semantic neo-max tokens (`bg-neo-yellow`, `bg-neo-magenta`, `border-ink`, etc.), not raw hex values.
 
 ---
 
@@ -182,14 +180,13 @@ These are genuinely undecided. Raise them rather than picking a default and movi
 
 | Open question | Why it matters |
 | --- | --- |
-| **IEEE palette hex values are unverified** | `#00629b` is the widely-used IEEE blue; the supporting palette in `docs/03-design-system.md § 2` is a working approximation. Brand compliance is a committee-review criterion. Confirm against official IEEE brand guidelines |
 | **Which TF.js model, and which classes it handles reliably** | The word bank is derived *from* the model's strong classes, not chosen first. This is hour-0 work |
 | **Word bank size and contents** | 40–60 is the recommendation; the real constraint is model accuracy |
 | **Round timer: 90s or 120s** | Ship it configurable, decide after playtesting |
 | **Ranking formula weights** | Starting point is `W_A = 100, W_B = 1`. Keep them as named constants in one place |
 | **Does the leaderboard reset daily or run cumulatively?** | Changes the leaderboard query and the post-event export |
 | **Is there a dedicated stall screen?** | The landscape leaderboard layout is **deferred** — only the mobile board ships. Confirming a screen exists is what reopens it |
-| **Deployment host and IEEE subdomain** | HTTPS is required — QR flows expect secure origins |
+| **Deployment host and TLC subdomain** | HTTPS is required — QR flows expect secure origins |
 
 ---
 

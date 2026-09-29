@@ -24,7 +24,7 @@ interface DrawingCanvasProps {
 // (issue #42)
 const PRESET_COLORS = [
   "#0A0A0A", // Black
-  "#00629B", // IEEE Blue
+  "#3B82F6", // Cobalt Blue
   "#E74C3C", // Red
   "#E67E22", // Orange
   "#F1C40F", // Yellow
@@ -434,8 +434,8 @@ export const DrawingCanvas = forwardRef<CanvasHandle, DrawingCanvasProps>(
 
     return (
       <div className="relative flex flex-1 flex-col w-full h-full">
-        {/* Canvas Frame — Clean white drawing surface */}
-        <div className="relative flex-1 w-full rounded-3xl overflow-hidden border-4 border-ieee-blue/30 bg-white shadow-xl">
+        {/* Canvas Frame — Clean white drawing surface with chunky neo-max border & shadow */}
+        <div className="relative flex-1 w-full rounded-3xl overflow-hidden border-4 border-ink bg-white shadow-brutal-lg">
           <canvas
             ref={canvasRef}
             className="absolute inset-0 w-full h-full canvas-surface cursor-crosshair touch-none select-none z-10"
@@ -452,7 +452,7 @@ export const DrawingCanvas = forwardRef<CanvasHandle, DrawingCanvasProps>(
           />
           {disabled && (
             <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] flex items-center justify-center z-20">
-              <span className="font-bold text-ink-muted text-lg bg-white/90 px-4 py-2 rounded-2xl shadow-md">
+              <span className="font-bold text-ink text-lg bg-neo-yellow px-4 py-2 rounded-2xl border-3 border-ink shadow-brutal">
                 Canvas locked 🔒
               </span>
             </div>
@@ -462,10 +462,10 @@ export const DrawingCanvas = forwardRef<CanvasHandle, DrawingCanvasProps>(
         {/* Toolbar & Action Controls */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-3 px-1">
           {/* Tool, Size, and Color Selector */}
-          <div className="flex items-center flex-wrap gap-2.5 bg-white p-2 rounded-2xl border-2 border-fun-yellow/40 shadow-sm w-full sm:w-auto justify-center sm:justify-start">
+          <div className="flex items-center flex-wrap gap-2.5 bg-white p-2 rounded-2xl border-3 border-ink shadow-brutal w-full sm:w-auto justify-center sm:justify-start">
 
             {/* Tool Switcher: Brush vs Bucket */}
-            <div className="flex items-center bg-surface-muted p-1 rounded-xl">
+            <div className="flex items-center bg-surface-muted p-1 rounded-xl border-2 border-ink/20">
               <button
                 type="button"
                 onClick={() => setActiveTool("brush")}
@@ -473,7 +473,7 @@ export const DrawingCanvas = forwardRef<CanvasHandle, DrawingCanvasProps>(
                 title="Brush Tool"
                 className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-bold text-xs transition-all ${
                   activeTool === "brush"
-                    ? "bg-white text-ink shadow-sm scale-105"
+                    ? "bg-neo-yellow text-ink border-2 border-ink shadow-xs scale-105"
                     : "text-ink-muted hover:text-ink"
                 }`}
               >
@@ -487,7 +487,7 @@ export const DrawingCanvas = forwardRef<CanvasHandle, DrawingCanvasProps>(
                 title="Fill Bucket Tool"
                 className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-bold text-xs transition-all ${
                   activeTool === "bucket"
-                    ? "bg-white text-ink shadow-sm scale-105"
+                    ? "bg-neo-yellow text-ink border-2 border-ink shadow-xs scale-105"
                     : "text-ink-muted hover:text-ink"
                 }`}
               >
@@ -495,11 +495,11 @@ export const DrawingCanvas = forwardRef<CanvasHandle, DrawingCanvasProps>(
               </button>
             </div>
 
-            <div className="h-6 w-px bg-surface-muted mx-0.5" />
+            <div className="h-6 w-0.5 bg-ink/20 mx-0.5" />
 
             {/* Brush Size (only for brush tool) */}
             {activeTool === "brush" && (
-              <div className="flex items-center gap-1 bg-surface-muted p-1 rounded-xl">
+              <div className="flex items-center gap-1 bg-surface-muted p-1 rounded-xl border-2 border-ink/20">
                 {BRUSH_SIZES.map((s) => (
                   <button
                     key={s.value}
@@ -509,7 +509,7 @@ export const DrawingCanvas = forwardRef<CanvasHandle, DrawingCanvasProps>(
                     title={`Size ${s.label}`}
                     className={`w-7 h-7 flex items-center justify-center rounded-lg font-bold text-xs transition-all ${
                       brushSize === s.value
-                        ? "bg-white text-ink shadow-sm scale-105"
+                        ? "bg-neo-yellow text-ink border-2 border-ink shadow-xs scale-105"
                         : "text-ink-muted hover:text-ink"
                     }`}
                   >
@@ -522,7 +522,7 @@ export const DrawingCanvas = forwardRef<CanvasHandle, DrawingCanvasProps>(
               </div>
             )}
 
-            <div className="h-6 w-px bg-surface-muted mx-0.5" />
+            <div className="h-6 w-0.5 bg-ink/20 mx-0.5" />
 
             {/* Color Swatches */}
             <div className="flex items-center gap-1.5 flex-wrap">
@@ -535,8 +535,8 @@ export const DrawingCanvas = forwardRef<CanvasHandle, DrawingCanvasProps>(
                   style={{ backgroundColor: c }}
                   className={`w-6 h-6 rounded-full transition-transform hover:scale-115 active:scale-95 border-2 ${
                     activeColor.toLowerCase() === c.toLowerCase()
-                      ? "border-ink scale-110 shadow-sm ring-2 ring-fun-yellow"
-                      : "border-transparent"
+                      ? "border-ink scale-110 shadow-xs ring-2 ring-neo-magenta"
+                      : "border-ink/40"
                   }`}
                 />
               ))}
@@ -544,7 +544,7 @@ export const DrawingCanvas = forwardRef<CanvasHandle, DrawingCanvasProps>(
               {/* Custom Color Picker */}
               <label
                 title="Custom Color"
-                className="relative w-6 h-6 rounded-full border-2 border-dashed border-ink-muted cursor-pointer flex items-center justify-center hover:scale-110 active:scale-95 transition-transform"
+                className="relative w-6 h-6 rounded-full border-2 border-dashed border-ink cursor-pointer flex items-center justify-center hover:scale-110 active:scale-95 transition-transform"
                 style={{
                   backgroundColor: PRESET_COLORS.includes(activeColor)
                     ? "transparent"
@@ -568,7 +568,7 @@ export const DrawingCanvas = forwardRef<CanvasHandle, DrawingCanvasProps>(
               type="button"
               onClick={handleUndo}
               disabled={!canUndo || disabled}
-              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-ink bg-white hover:bg-surface-muted border-2 border-surface-muted rounded-xl disabled:opacity-40 transition-all active:scale-95 shadow-xs"
+              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-ink bg-white hover:bg-neo-yellow-light border-3 border-ink rounded-xl disabled:opacity-40 transition-all active:scale-95 shadow-brutal"
             >
               <span>Undo</span>
             </button>
@@ -580,7 +580,7 @@ export const DrawingCanvas = forwardRef<CanvasHandle, DrawingCanvasProps>(
                 onClear?.();
               }}
               disabled={disabled}
-              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-urgent bg-urgent/10 hover:bg-urgent/20 border-2 border-urgent/20 rounded-xl disabled:opacity-40 transition-all active:scale-95 shadow-xs"
+              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-neo-red hover:brightness-95 border-3 border-ink rounded-xl disabled:opacity-40 transition-all active:scale-95 shadow-brutal"
             >
               <span>Clear</span>
             </button>

@@ -18,13 +18,17 @@ export function Button({
   ...props
 }: ButtonProps) {
   const baseStyles =
-    "inline-flex min-h-[48px] items-center justify-center rounded-xl px-6 py-3 text-base font-semibold transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none shadow-sm";
+    "inline-flex min-h-[48px] items-center justify-center rounded-xl px-6 py-3 text-base font-bold transition-all active:scale-[0.95] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:pointer-events-none";
 
   const variantStyles = {
-    primary: "bg-ieee-blue text-white hover:bg-ieee-blue-dark active:bg-ieee-blue-dark shadow-ieee-blue/20 shadow-md",
-    secondary: "bg-ieee-cyan text-ink hover:brightness-95 active:brightness-90",
-    outline: "border-2 border-ieee-blue text-ieee-blue hover:bg-ieee-blue/5 active:bg-ieee-blue/10",
-    ghost: "text-ink-muted hover:bg-surface-muted active:bg-surface-muted shadow-none",
+    primary:
+      "bg-neo-magenta text-white border-3 border-ink shadow-brutal hover:bg-neo-magenta-dark hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg",
+    secondary:
+      "bg-neo-cyan text-ink border-3 border-ink shadow-brutal hover:brightness-95 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg",
+    outline:
+      "border-3 border-ink text-ink bg-neo-yellow hover:bg-neo-yellow-light shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg",
+    ghost:
+      "text-ink-muted hover:bg-neo-yellow-light active:bg-neo-yellow-dark shadow-none",
   };
 
   return (
