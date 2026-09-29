@@ -105,7 +105,7 @@ body {
 
 /* Neo-max brutalist card */
 @utility neo-card {
-  background: white;
+  background-color: var(--color-surface-card);
   border: 3px solid #1A1A2E;
   border-radius: 1rem;
   box-shadow: 4px 4px 0px #1A1A2E;

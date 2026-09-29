@@ -7,8 +7,8 @@
 /** Round length. Open question: 90s or 120s — decide after playtesting. */
 export const ROUND_SECONDS = 90;
 
-/** Full-screen 3-2-1 before the canvas activates. */
-export const COUNTDOWN_SECONDS = 3;
+/** Full-screen 2-1-GO before the canvas activates. */
+export const COUNTDOWN_SECONDS = 2;
 
 /** Words offered per round. */
 export const WORDS_PER_ROUND = 3;

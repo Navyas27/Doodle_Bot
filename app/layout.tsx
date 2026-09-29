@@ -11,6 +11,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "DoodleBot — TLC",
   description: "Draw it. Beat the AI. Top the board.",
+  icons: {
+    icon: "/images/icon.png",
+  },
 };
 
 export const viewport: Viewport = {

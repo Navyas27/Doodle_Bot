@@ -16,9 +16,9 @@ const WORD_EMOJIS: Record<string, string> = {
 };
 
 const CARD_COLORS = [
-  "from-neo-magenta/20 to-neo-orange/20 hover:from-neo-magenta/30 hover:to-neo-orange/30",
-  "from-neo-violet/20 to-neo-blue/20 hover:from-neo-violet/30 hover:to-neo-blue/30",
-  "from-neo-cyan/25 to-neo-lime/25 hover:from-neo-cyan/35 hover:to-neo-lime/35",
+  "bg-gradient-to-r from-neo-magenta/30 to-neo-orange/30 hover:from-neo-magenta/45 hover:to-neo-orange/45",
+  "bg-gradient-to-r from-neo-violet/30 to-neo-blue/30 hover:from-neo-violet/45 hover:to-neo-blue/45",
+  "bg-gradient-to-r from-neo-cyan/40 to-neo-lime/40 hover:from-neo-cyan/55 hover:to-neo-lime/55",
 ];
 
 export function WordSelector({ words, onSelect, disabled = false }: WordSelectorProps) {

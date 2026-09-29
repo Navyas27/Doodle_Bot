@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaRobot } from "react-icons/fa6";
+import { FaRobot, FaTrophy } from "react-icons/fa6";
 import { Button } from "../components/Button";
 import { ScreenShell } from "../components/ScreenShell";
 import { createParticipant } from "../lib/data";
@@ -25,7 +26,7 @@ export default function LandingPage() {
           if (parsed.name) {
             setName(parsed.name);
           }
-        } catch (_) {}
+        } catch (_) { }
       }
     }
   }, []);
@@ -108,9 +109,8 @@ export default function LandingPage() {
             >
               ✨
             </span>
-            {/* TLC Logo — replace src when logo asset is provided */}
             <img
-              src="/tlc-logo.png"
+              src="/images/icon.png"
               alt="TLC Logo"
               className="h-14 sm:h-20 w-auto object-contain"
             />
@@ -129,9 +129,6 @@ export default function LandingPage() {
             </h1>
             <p className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-neo-magenta to-neo-violet bg-clip-text text-transparent text-balance">
               Draw it. Beat the AI. Top the board.
-            </p>
-            <p className="text-xs sm:text-sm font-semibold text-ink-muted max-w-sm mx-auto">
-              Test your sketch skills against our real-time computer vision AI model.
             </p>
           </div>
         </div>
@@ -177,9 +174,19 @@ export default function LandingPage() {
             {error && <p className="text-xs font-bold text-urgent text-left">{error}</p>}
           </div>
 
-          <Button type="submit" variant="primary" fullWidth isLoading={isSubmitting}>
-            Start Playing 🚀
-          </Button>
+          <div className="flex flex-col gap-3 pt-1">
+            <Button type="submit" variant="primary" fullWidth isLoading={isSubmitting}>
+              Start Playing 🚀
+            </Button>
+
+            <Link
+              href="/leaderboard"
+              className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-bold bg-neo-cyan text-ink border-3 border-ink shadow-brutal hover:brightness-95 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg transition-all active:scale-[0.95] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+            >
+              <FaTrophy aria-hidden="true" className="text-ink" />
+              <span>Leaderboard</span>
+            </Link>
+          </div>
         </form>
 
         {/* Footer info */}

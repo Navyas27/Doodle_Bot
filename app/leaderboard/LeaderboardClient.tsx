@@ -122,87 +122,109 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
 
   return (
     <ScreenShell showLogo={true}>
-      <div className="flex flex-1 flex-col max-w-2xl lg:max-w-4xl mx-auto w-full p-4 lg:p-8 space-y-6">
+      <div className="relative flex flex-1 flex-col max-w-2xl lg:max-w-4xl mx-auto w-full p-4 lg:p-8 space-y-6">
+        {/* Decorative floating Neo-Maximalism background stickers */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden select-none z-0" aria-hidden="true">
+          <span className="absolute top-20 left-4 sm:left-10 text-3xl animate-float rotate-[-12deg]" style={{ animationDelay: "0s" }}>🏆</span>
+          <span className="absolute top-28 right-5 sm:right-12 text-3xl animate-float rotate-[15deg]" style={{ animationDelay: "0.7s" }}>🔥</span>
+          <span className="absolute bottom-24 left-6 sm:left-12 text-3xl animate-float rotate-[10deg]" style={{ animationDelay: "1.2s" }}>⚡</span>
+          <span className="absolute bottom-16 right-6 sm:right-12 text-3xl animate-float rotate-[-14deg]" style={{ animationDelay: "0.4s" }}>🌈</span>
+        </div>
+
         {/* Title Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
           <div className="space-y-1">
             <h1
-              className="text-3xl sm:text-4xl font-bold text-ink tracking-wide flex items-center flex-wrap gap-2"
+              className="text-3xl sm:text-5xl font-bold text-ink tracking-wide flex items-center flex-wrap gap-2.5 drop-shadow-[2px_2px_0px_#FFFFFF]"
               style={{ fontFamily: "var(--font-display)" }}
             >
               <span>Leaderboard</span>
-              <FaTrophy aria-hidden="true" className="text-medal-gold" />
-              {/* Connection status pill (Issue #14). "Live" only means the last read reached
-                  Supabase, not that the Realtime socket is delivering events — see the
-                  subscription comment below for why that channel can never fire under RLS. */}
-              <span
-                className={`neo-badge gap-1.5 motion-safe:transition-colors ${statusCopy.pillClass}`}
-                role="status"
-                style={{ fontFamily: "var(--font-sans)" }}
-              >
-                <FaCircle
-                  aria-hidden="true"
-                  className={`text-[6px] ${status === "reconnecting" ? "motion-safe:animate-pulse" : ""}`}
-                />
-                {statusCopy.label}
-              </span>
+              <FaTrophy aria-hidden="true" className="text-neo-orange drop-shadow-[2px_2px_0px_#1A1A2E]" />
             </h1>
-            <p className="text-xs font-extrabold text-ink-muted uppercase tracking-wider">Live Standings</p>
+            <p className="text-xs font-extrabold text-ink uppercase tracking-wider bg-white inline-block px-2.5 py-0.5 rounded-full border-2 border-ink shadow-xs">
+              ⚡ Standings • ODS AI Futures
+            </p>
           </div>
           <Link
             href="/play"
-            className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-neo-magenta hover:bg-neo-magenta-dark rounded-xl border-3 border-ink shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg transition-all active:scale-95 shrink-0 whitespace-nowrap self-start sm:self-auto"
+            className="inline-flex h-11 min-w-[140px] items-center justify-center gap-2 px-5 text-sm font-bold text-white bg-neo-magenta hover:bg-neo-magenta-dark rounded-xl border-3 border-ink shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg transition-all active:scale-95 shrink-0 whitespace-nowrap self-start sm:self-auto"
           >
-            Play Now
+            <span>🎨 Play Now</span>
           </Link>
         </div>
 
-        {/* Glanceable Headline Stats */}
-        <div className="grid grid-cols-3 gap-3">
-          <div className="neo-card bg-neo-violet/10 border-neo-violet/30 rounded-2xl p-3 text-center space-y-1">
-            <span className="text-xs font-extrabold text-ink-muted uppercase block">Total Plays</span>
-            <span className="text-2xl font-black text-neo-violet">{totalGames}</span>
+        {/* Glanceable Headline Stats — 3 Cards in 3 Distinct Vibrant Neo-Max Colours */}
+        <div className="relative z-10 grid grid-cols-3 gap-3 sm:gap-4">
+          {/* Card 1: Electric Violet */}
+          <div className="rounded-2xl border-3 border-ink bg-neo-violet text-white p-3.5 sm:p-4 text-center space-y-1 shadow-brutal neo-card-hover transition-all">
+            <span className="text-lg sm:text-xl block">🎮</span>
+            <span className="text-[11px] sm:text-xs font-extrabold text-white/90 uppercase tracking-wider block">
+              Total Plays
+            </span>
+            <span
+              className="text-2xl sm:text-4xl font-black text-neo-yellow drop-shadow-[2px_2px_0px_#1A1A2E] block"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              {totalGames}
+            </span>
           </div>
 
-          <div className="neo-card bg-neo-cyan/10 border-neo-cyan/30 rounded-2xl p-3 text-center space-y-1">
-            <span className="text-xs font-extrabold text-ink-muted uppercase block">AI Guesses</span>
-            <span className="text-2xl font-black text-win">{totalWins}</span>
+          {/* Card 2: Mint Cyan */}
+          <div className="rounded-2xl border-3 border-ink bg-neo-cyan text-ink p-3.5 sm:p-4 text-center space-y-1 shadow-brutal neo-card-hover transition-all">
+            <span className="text-lg sm:text-xl block">🤖</span>
+            <span className="text-[11px] sm:text-xs font-extrabold text-ink/80 uppercase tracking-wider block">
+              AI Guesses
+            </span>
+            <span
+              className="text-2xl sm:text-4xl font-black text-white drop-shadow-[2px_2px_0px_#1A1A2E] block"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              {totalWins}
+            </span>
           </div>
 
-          <div className="neo-card bg-neo-orange/10 border-neo-orange/30 rounded-2xl p-3 text-center space-y-1">
-            <span className="text-xs font-extrabold text-ink-muted uppercase block">Fastest</span>
-            <span className="text-2xl font-black text-ink">
+          {/* Card 3: Hot Pink / Magenta */}
+          <div className="rounded-2xl border-3 border-ink bg-neo-magenta text-white p-3.5 sm:p-4 text-center space-y-1 shadow-brutal neo-card-hover transition-all">
+            <span className="text-lg sm:text-xl block">⚡</span>
+            <span className="text-[11px] sm:text-xs font-extrabold text-white/90 uppercase tracking-wider block">
+              Fastest
+            </span>
+            <span
+              className="text-2xl sm:text-4xl font-black text-neo-yellow drop-shadow-[2px_2px_0px_#1A1A2E] block"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
               {fastestTime !== null ? `${fastestTime.toFixed(1)}s` : "--"}
             </span>
           </div>
         </div>
 
         {/* Rankings Table / List */}
-        <div className="flex-1 space-y-3">
-          <h2 className="text-xs font-extrabold text-ink uppercase tracking-wider px-1">
-            Top Participants
-          </h2>
+        <div className="relative z-10 flex-1 space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <h2 className="neo-badge bg-neo-orange text-white shadow-brutal uppercase tracking-wider text-xs">
+              🌟 Top Participants
+            </h2>
+          </div>
 
           {leaderboard.length === 0 && snapshot.source === "local" ? (
             // Distinct from the genuinely-empty state below on purpose (Issue #14): this is the
             // local fallback, not a confirmed empty board. On a stall display, showing the same
             // "no games played" copy here would read as a healthy board that just hasn't seen a
             // play yet, when it may in fact be disconnected from Supabase entirely.
-            <div className="py-12 text-center space-y-3 neo-card bg-urgent/10 rounded-2xl border-3 border-ink">
-              <FaCircle aria-hidden="true" className="text-2xl text-urgent mx-auto" />
-              <p className="text-sm font-bold text-ink">Can&apos;t reach the leaderboard</p>
-              <p className="text-xs font-semibold text-ink-muted">Showing this device&apos;s local results. Retrying every 10s.</p>
+            <div className="py-12 text-center space-y-3 rounded-2xl border-3 border-ink bg-neo-orange text-white shadow-brutal">
+              <FaCircle aria-hidden="true" className="text-2xl text-neo-yellow mx-auto" />
+              <p className="text-sm font-bold text-white">Can&apos;t reach the leaderboard</p>
+              <p className="text-xs font-semibold text-white/90">Showing this device&apos;s local results. Retrying every 10s.</p>
             </div>
           ) : leaderboard.length === 0 ? (
-            <div className="py-12 text-center space-y-3 neo-card bg-white rounded-2xl">
-              <FaPalette aria-hidden="true" className="text-4xl text-neo-cyan mx-auto" />
-              <p className="text-sm font-bold text-ink">No games played yet today!</p>
+            <div className="py-12 text-center space-y-3 rounded-2xl border-3 border-ink bg-white shadow-brutal">
+              <FaPalette aria-hidden="true" className="text-4xl text-neo-magenta mx-auto" />
+              <p className="text-base font-extrabold text-ink">No games played yet today!</p>
               <p className="text-xs font-semibold text-ink-muted">Be the first to draw and set a high score.</p>
             </div>
           ) : (
             <div className="space-y-3">
-              {leaderboard.map((row) => {
-                const isTop3 = row.rank <= 3;
+              {leaderboard.map((row, idx) => {
                 const medalColor =
                   row.rank === 1
                     ? "text-medal-gold"
@@ -212,35 +234,50 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
                     ? "text-medal-bronze"
                     : null;
 
+                // Give Top 3 podium cards 3 distinct vibrant colours, and cycle fun tints for the rest
+                const rowColorClass =
+                  row.rank === 1
+                    ? "bg-gradient-to-r from-neo-magenta to-neo-orange text-white border-ink shadow-brutal-lg"
+                    : row.rank === 2
+                    ? "bg-gradient-to-r from-neo-violet to-neo-blue text-white border-ink shadow-brutal"
+                    : row.rank === 3
+                    ? "bg-gradient-to-r from-neo-cyan to-neo-lime text-ink border-ink shadow-brutal"
+                    : idx % 2 === 0
+                    ? "bg-white text-ink border-ink shadow-brutal"
+                    : "bg-surface-muted text-ink border-ink shadow-brutal";
+
+                const isDarkCard = row.rank === 1 || row.rank === 2;
+
                 return (
                   <div
                     key={row.participantId}
-                    className={`neo-card flex items-center justify-between p-4 rounded-2xl motion-safe:transition-all ${
-                      isTop3
-                        ? "bg-white border-neo-magenta/30 ring-2 ring-neo-magenta/10"
-                        : "bg-surface-muted border-ink"
-                    }`}
+                    className={`flex items-center justify-between p-4 rounded-2xl border-3 motion-safe:transition-all neo-card-hover ${rowColorClass}`}
                   >
                     {/* Rank & Name */}
                     <div className="flex items-center gap-3">
                       <div
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm border-2 border-ink ${
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm border-2 border-ink shadow-xs ${
                           row.rank === 1
-                            ? "bg-amber-100 text-amber-800"
+                            ? "bg-neo-yellow text-ink"
                             : row.rank === 2
-                            ? "bg-slate-200 text-slate-800"
+                            ? "bg-white text-neo-violet"
                             : row.rank === 3
-                            ? "bg-orange-100 text-orange-800"
-                            : "bg-white text-ink"
+                            ? "bg-neo-orange text-white"
+                            : "bg-neo-yellow text-ink"
                         }`}
                       >
                         {medalColor ? (
                           <>
-                            {/* The medal icon alone doesn't say WHICH medal to a screen reader,
-                                and previously the numeric rank was dropped entirely for top 3 —
-                                colour + icon shape was the only signal. Kept visually (that's the
-                                point of a medal), restored for assistive tech via sr-only text. */}
-                            <FaMedal aria-hidden="true" className={medalColor} />
+                            <FaMedal
+                              aria-hidden="true"
+                              className={
+                                row.rank === 1
+                                  ? "text-medal-gold text-lg"
+                                  : row.rank === 2
+                                  ? "text-neo-violet text-lg"
+                                  : "text-white text-lg"
+                              }
+                            />
                             <span className="sr-only">Rank #{row.rank}</span>
                           </>
                         ) : (
@@ -249,24 +286,44 @@ export function LeaderboardClient({ initialSnapshot }: LeaderboardClientProps) {
                       </div>
 
                       <div>
-                        <span className="font-bold text-base text-ink block">{row.name}</span>
-                        <div className="flex items-center gap-2 text-xs font-semibold text-ink-muted">
-                          <span>{row.successfulGuesses} wins</span>
+                        <span
+                          className={`font-extrabold text-base sm:text-lg block ${
+                            isDarkCard ? "text-white drop-shadow-[1px_1px_0px_#1A1A2E]" : "text-ink"
+                          }`}
+                        >
+                          {row.name} {row.rank === 1 && "👑"}
+                        </span>
+                        <div
+                          className={`flex items-center gap-2 text-xs font-bold ${
+                            isDarkCard ? "text-white/90" : "text-ink-muted"
+                          }`}
+                        >
+                          <span>🎯 {row.successfulGuesses} wins</span>
                           <span>•</span>
-                          <span>{row.gamesPlayed} games</span>
+                          <span>🎮 {row.gamesPlayed} games</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Score & Best Time */}
                     <div className="text-right">
-                      <span className="font-black text-lg text-neo-magenta block">{row.score} pts</span>
-                      <span className="text-xs font-bold text-ink-muted">
-                        {/* Truthiness would treat an exact 0.0s best time as "No wins yet" — compare
-                            against null explicitly. The offline path can't produce 0 (clamped to a
-                            0.5s minimum in app/play/page.tsx), but remote data isn't clamped. */}
+                      <span
+                        className={`font-black text-lg sm:text-xl block ${
+                          isDarkCard
+                            ? "text-neo-yellow drop-shadow-[2px_2px_0px_#1A1A2E]"
+                            : "text-neo-magenta"
+                        }`}
+                        style={{ fontFamily: "var(--font-display)" }}
+                      >
+                        {row.score} pts
+                      </span>
+                      <span
+                        className={`text-xs font-bold ${
+                          isDarkCard ? "text-white/90" : "text-ink-muted"
+                        }`}
+                      >
                         {row.bestTimeSeconds !== null
-                          ? `Best: ${row.bestTimeSeconds.toFixed(1)}s`
+                          ? `⚡ Best: ${row.bestTimeSeconds.toFixed(1)}s`
                           : "No wins yet"}
                       </span>
                     </div>
